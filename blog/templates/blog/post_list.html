@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div id="listBlog">
+    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form method="post" action="/blog/api/save/">
+                {% csrf_token %}
+                <input type="hidden" id="blog-id" name="blog-id"/>
+                <textarea rows="4" cols="50" id="edit-blog-text" name="blog-text"></textarea>
+                <input type="submit" value="Save"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script src="{% static 'javascript/blog_list.js' %}"></script>
+{% endblock %}
