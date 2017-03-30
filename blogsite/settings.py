@@ -27,7 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = '/messages'
 # Application definition
 
 INSTALLED_APPS = [
@@ -74,6 +76,14 @@ WSGI_APPLICATION = 'blogsite.wsgi.application'
 
 LOGIN_REDIRECT_URL = 'post_list_page'
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'happymishra66@gmail.com'
+EMAIL_HOST_PASSWORD = 'm0145966AM'
+DEFAULT_FROM_EMAIL = 'happymishra66@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SERVER_EMAIL = 'happymishra66@gmail.com'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases

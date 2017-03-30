@@ -14,7 +14,15 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'blog/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'template_name': 'logged_out.html', 'next_page': 'post_list_page'}, name='logout'),
     url(r'^register/$', views.register, name='register'),
-    url(r'^register/complete/$', views.registration_complete, name='registration_complete')
+    url(r'^register/complete/$', views.registration_complete, name='registration_complete'),
+
+
+    # Reset password url
+    url(r'^password_reset/$', auth_views.password_reset, {'post_reset_redirect': '/blog/password_reset/mailed/'}, name='password_reset'),
+    url(r'^password_reset/mailed/$', auth_views.password_reset_done),
+   #url('^password_reset/(?P<uidb36>[0-9A-Za-z]{1,13})-(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, {'post_reset_redirect': '/blog/password_reset/complete/'}, name = 'password_reset_confirm'),
+    url(r'^password_reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', auth_views.password_reset_confirm, name='password_reset_confirm'),
+    url('^password_reset/complete/$', auth_views.password_reset_complete)
 
 ]
 
