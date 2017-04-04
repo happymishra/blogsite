@@ -7,6 +7,9 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.contrib.auth.forms import UserCreationForm
 from django.template.context_processors import csrf
+from django.contrib import auth
+from blogsite import settings
+from django.contrib.auth.decorators import login_required
 
 
 def register(request):
@@ -42,6 +45,7 @@ def post_detail(request, pk):
 
 
 # Saves the edit blog in the database
+@login_required
 def save_edit_blog(request):
     blog_id = request.POST['blog-id']
     blog_text = request.POST['blog-text']
@@ -54,6 +58,7 @@ def save_edit_blog(request):
 
 
 # Delete blog from the database
+@login_required
 def delete_blog(request, pk):
     try:
         Post.objects.filter(pk=pk).delete()
@@ -64,6 +69,7 @@ def delete_blog(request, pk):
 
 
 # Create blog in the database
+@login_required
 def create_blog(request):
     if request.method == "POST":
         me = User.objects.get(username='admin')
@@ -87,3 +93,25 @@ def post_detail_page(request):
 def create_blog_page(request):
     return render(request, 'blog/create_blog.html')
 
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+        else:
+            return HttpResponseRedirect('/blog/login_error')
+
+    else:
+        token = {}
+        token.update(csrf(request))
+        return render_to_response('blog/login.html', token)
+
+
+def login_error(request):
+    return render_to_response('blog/login_error.html')
